@@ -262,24 +262,9 @@ function prompt_kronuz_colors {
     DEFAULT_PROMPT_KRONUZ_COLOR_SEP='$col[darkgrey]'
     DEFAULT_PROMPT_KRONUZ_COLOR_IP='$col[darkgrey]'
     DEFAULT_PROMPT_KRONUZ_COLOR_TIME='$col[darkgrey]'
-    case $(hostname | tr '[:upper:]' '[:lower:]') in
-      *$USERNAME*)
-        DEFAULT_PROMPT_KRONUZ_COLOR_HOST='$col[blue]'
-        DEFAULT_PROMPT_KRONUZ_COLOR_PWD='%(!.$col[tomato].$col[aqua])'
-        DEFAULT_PROMPT_KRONUZ_COLOR_USER='%(!.%B$col[tomato].%B$col[white])'
-        ;;
-      *)
-        if [ -x /sbin/sysctl ] && [ "$(sysctl security.jail.jailed)" = 'security.jail.jailed: 1' ]; then
-          DEFAULT_PROMPT_KRONUZ_COLOR_HOST='$col[green]'
-          DEFAULT_PROMPT_KRONUZ_COLOR_PWD='%(!.$col[tomato].$col[springgreen])'
-          DEFAULT_PROMPT_KRONUZ_COLOR_USER='%(!.%B$col[tomato].%B$col[white])'
-        else
-          DEFAULT_PROMPT_KRONUZ_COLOR_HOST='$col[yellow]'
-          DEFAULT_PROMPT_KRONUZ_COLOR_PWD='%(!.$col[tomato].$col[khaki])'
-          DEFAULT_PROMPT_KRONUZ_COLOR_USER='%(!.%B$col[tomato].%B$col[white])'
-        fi
-        ;;
-    esac
+    DEFAULT_PROMPT_KRONUZ_COLOR_HOST='$col[blue]'
+    DEFAULT_PROMPT_KRONUZ_COLOR_PWD='%(!.$col[tomato].$col[aqua])'
+    DEFAULT_PROMPT_KRONUZ_COLOR_USER='%(!.%B$col[tomato].%B$col[white])'
   else
     DEFAULT_PROMPT_KRONUZ_COLOR_PRIMARY1='%(!.%B$col[red].%B$col[red])'
     DEFAULT_PROMPT_KRONUZ_COLOR_PRIMARY2='%(!.%B$col[red].%B$col[yellow])'
@@ -314,24 +299,9 @@ function prompt_kronuz_colors {
     DEFAULT_PROMPT_KRONUZ_COLOR_SEP='$col[darkgrey]'
     DEFAULT_PROMPT_KRONUZ_COLOR_IP='$col[darkgrey]'
     DEFAULT_PROMPT_KRONUZ_COLOR_TIME='$col[darkgrey]'
-    case $(hostname | tr '[:upper:]' '[:lower:]') in
-      *$USERNAME*)
-        DEFAULT_PROMPT_KRONUZ_COLOR_HOST='$col[blue]'
-        DEFAULT_PROMPT_KRONUZ_COLOR_PWD='%(!.$col[red].$col[cyan])'
-        DEFAULT_PROMPT_KRONUZ_COLOR_USER='%(!.%B$col[red].%B$col[white])'
-        ;;
-      *)
-        if [ -x /sbin/sysctl ] && [ "$(sysctl security.jail.jailed)" = 'security.jail.jailed: 1' ]; then
-          DEFAULT_PROMPT_KRONUZ_COLOR_HOST='$col[green]'
-          DEFAULT_PROMPT_KRONUZ_COLOR_PWD='%(!.$col[red].$col[green])'
-          DEFAULT_PROMPT_KRONUZ_COLOR_USER='%(!.%B$col[red].%B$col[white])'
-        else
-          DEFAULT_PROMPT_KRONUZ_COLOR_HOST='$col[yellow]'
-          DEFAULT_PROMPT_KRONUZ_COLOR_PWD='%(!.$col[red].$col[yellow])'
-          DEFAULT_PROMPT_KRONUZ_COLOR_USER='%(!.%B$col[red].%B$col[white])'
-        fi
-        ;;
-    esac
+    DEFAULT_PROMPT_KRONUZ_COLOR_HOST='$col[blue]'
+    DEFAULT_PROMPT_KRONUZ_COLOR_PWD='%(!.$col[red].$col[cyan])'
+    DEFAULT_PROMPT_KRONUZ_COLOR_USER='%(!.%B$col[red].%B$col[white])'
   fi
   DEFAULT_PROMPT_KRONUZ_COLOR_NONE='%b%u%s%f%k'
 }
@@ -371,7 +341,7 @@ function prompt_kronuz_async_git {
 function prompt_kronuz_async_tasks {
   # Initialize async worker. This needs to be done here and not in
   # prompt_kronuz_setup so the git formatting can be overridden by other prompts.
-  if (( !${prompt_kronuz_async_init:-0} )) || (! zpty -t "prompt_kronuz"); then
+  if (( !${prompt_kronuz_async_init:-0} )); then
     echo "async_start_worker 'prompt_kronuz'" >> /tmp/prompt_kronuz
     async_start_worker "prompt_kronuz" -n
     echo "async_register_callback 'prompt_kronuz'" >> /tmp/prompt_kronuz
