@@ -237,6 +237,7 @@ function prompt_kronuz_colors {
     DEFAULT_PROMPT_KRONUZ_COLOR_VENV='$col[white]'
     DEFAULT_PROMPT_KRONUZ_COLOR_VIM='%B$col[green]'
     DEFAULT_PROMPT_KRONUZ_COLOR_EMACS='%B$col[green]'
+    DEFAULT_PROMPT_KRONUZ_COLOR_ETCTL='%B$col[magenta]'
     DEFAULT_PROMPT_KRONUZ_COLOR_OVERWRITE='$col[red]'
     DEFAULT_PROMPT_KRONUZ_COLOR_INSERT='$col[darkgrey]'
     DEFAULT_PROMPT_KRONUZ_COLOR_COMPLETING='%B$col[black]'
@@ -262,7 +263,11 @@ function prompt_kronuz_colors {
     DEFAULT_PROMPT_KRONUZ_COLOR_SEP='$col[darkgrey]'
     DEFAULT_PROMPT_KRONUZ_COLOR_IP='$col[darkgrey]'
     DEFAULT_PROMPT_KRONUZ_COLOR_TIME='$col[darkgrey]'
-    DEFAULT_PROMPT_KRONUZ_COLOR_HOST='$col[blue]'
+if [[ "$ET_VERSION" = "" ]]; then
+    DEFAULT_PROMPT_KRONUZ_COLOR_HOST='$col[yellow]'
+else
+    DEFAULT_PROMPT_KRONUZ_COLOR_HOST='$col[green]'
+fi
     DEFAULT_PROMPT_KRONUZ_COLOR_PWD='%(!.$col[tomato].$col[aqua])'
     DEFAULT_PROMPT_KRONUZ_COLOR_USER='%(!.%B$col[tomato].%B$col[white])'
   else
@@ -274,6 +279,7 @@ function prompt_kronuz_colors {
     DEFAULT_PROMPT_KRONUZ_COLOR_VENV='$col[white]'
     DEFAULT_PROMPT_KRONUZ_COLOR_VIM='%B$col[green]'
     DEFAULT_PROMPT_KRONUZ_COLOR_EMACS='%B$col[green]'
+    DEFAULT_PROMPT_KRONUZ_COLOR_ETCTL='%B$col[magenta]'
     DEFAULT_PROMPT_KRONUZ_COLOR_OVERWRITE='$col[red]'
     DEFAULT_PROMPT_KRONUZ_COLOR_INSERT='$col[darkgrey]'
     DEFAULT_PROMPT_KRONUZ_COLOR_COMPLETING='%B$col[black]'
@@ -299,7 +305,7 @@ function prompt_kronuz_colors {
     DEFAULT_PROMPT_KRONUZ_COLOR_SEP='$col[darkgrey]'
     DEFAULT_PROMPT_KRONUZ_COLOR_IP='$col[darkgrey]'
     DEFAULT_PROMPT_KRONUZ_COLOR_TIME='$col[darkgrey]'
-    DEFAULT_PROMPT_KRONUZ_COLOR_HOST='$col[blue]'
+    DEFAULT_PROMPT_KRONUZ_COLOR_HOST='$col[green]'
     DEFAULT_PROMPT_KRONUZ_COLOR_PWD='%(!.$col[red].$col[cyan])'
     DEFAULT_PROMPT_KRONUZ_COLOR_USER='%(!.%B$col[red].%B$col[white])'
   fi
@@ -405,7 +411,7 @@ function prompt_kronuz_setup {
   COLORS=(action added ahead behind branch clean commit completing deleted
     dirty host indexed info insert ip modified none overwrite position primary1
     primary2 primary3 pwd remote renamed sep stashed status_err status_ok time
-    unindexed unmerged untracked user venv vim emacs)
+    unindexed unmerged untracked user venv vim emacs etctl)
 
   typeset -A fcol
   for color in "${COLORS[@]}" ; do
@@ -468,8 +474,9 @@ function prompt_kronuz_setup {
   DEFAULT_PROMPT_KRONUZ_ERROR="%(?.. $col[status_err]⏎ %?$col[none])"
   DEFAULT_PROMPT_KRONUZ_VIM="\${VIM:+\" $col[vim]V$col[none]\"}"
   DEFAULT_PROMPT_KRONUZ_EMACS="\${INSIDE_EMACS:+\" $col[emacs]E$col[none]\"}"
+  DEFAULT_PROMPT_KRONUZ_ETCTL="\${ETCTL_SESSION:+\" $col[info]etctl$col[none]:$col[etctl]\${ETCTL_SESSION}$col[none]\"}"
   DEFAULT_PROMPT_KRONUZ_USER="%n"
-  DEFAULT_PROMPT_KRONUZ_IP="\$(/sbin/ifconfig | grep \"inet \" | grep -v \"127.0.0.1\" | head -1 | awk \"{print \\\$2;}\")"
+  DEFAULT_PROMPT_KRONUZ_IP="\$(ifconfig | grep \"inet \" | grep -v \"127.0.0.1\" | head -1 | awk \"{print \\\$2;}\")"
   DEFAULT_PROMPT_KRONUZ_GIT="\${_prompt_kronuz_git:+\${(e)_prompt_kronuz_git}}"
   DEFAULT_PROMPT_KRONUZ_VENV="\${python_info:+\${(e)python_info[virtualenv]}}"
   DEFAULT_PROMPT_KRONUZ_OVERWRITE="\${editor_info:+\${(e)editor_info[overwrite]}}"
@@ -484,6 +491,7 @@ function prompt_kronuz_setup {
   kronuz[error]="\${(e)PROMPT_KRONUZ_ERROR:-\$DEFAULT_PROMPT_KRONUZ_ERROR}"
   kronuz[vim]="\${(e)PROMPT_KRONUZ_VIM:-\$DEFAULT_PROMPT_KRONUZ_VIM}"
   kronuz[emacs]="\${(e)PROMPT_KRONUZ_EMACS:-\$DEFAULT_PROMPT_KRONUZ_EMACS}"
+  kronuz[etctl]="\${(e)PROMPT_KRONUZ_ETCTL:-\$DEFAULT_PROMPT_KRONUZ_ETCTL}"
   kronuz[user]="$col[user]\${(e)PROMPT_KRONUZ_USER:-\$DEFAULT_PROMPT_KRONUZ_USER}$col[none]"
   kronuz[git]="\${(e)PROMPT_KRONUZ_GIT:-\$DEFAULT_PROMPT_KRONUZ_GIT}"
   kronuz[venv]="\${(e)PROMPT_KRONUZ_VENV:-\$DEFAULT_PROMPT_KRONUZ_VENV}"
@@ -497,7 +505,7 @@ function prompt_kronuz_setup {
   # Define prompts.
   SPROMPT='zsh: correct $col[red]%R%f to $col[green]%r%f [nyae]? '
   RPROMPT="$kronuz[overwrite]$kronuz[vim]$kronuz[emacs]"
-  PROMPT="$kronuz[err]$kronuz[info]$kronuz[git]$kronuz[venv]$kronuz[error]$kronuz[nl]$kronuz[time] $kronuz[pwd] $kronuz[prompt] "
+  PROMPT="$kronuz[err]$kronuz[info]$kronuz[etctl]$kronuz[git]$kronuz[venv]$kronuz[error]$kronuz[nl]$kronuz[time] $kronuz[pwd] $kronuz[prompt] "
 }
 
 
